@@ -121,25 +121,25 @@ static std::string GetShaderExtensionString(ExecutionModel model)
 	switch (model)
 	{
 	case ExecutionModel::Vertex:
-		result += "_vs.bin";
+		result += "_vs.spv";
 		break;
 	case ExecutionModel::TessellationControl:
-		result += "_tcs.bin";
+		result += "_tcs.spv";
 		break;
 	case ExecutionModel::TessellationEvaluation:
-		result += "_tes.bin";
+		result += "_tes.spv";
 		break;
 	case ExecutionModel::Geometry:
-		result += "_gs.bin";
+		result += "_gs.spv";
 		break;
 	case ExecutionModel::Fragment:
-		result += "_fs.bin";
+		result += "_fs.spv";
 		break;
 	case ExecutionModel::Compute:
-		result += "_cs.bin";
+		result += "_cs.spv";
 		break;
 	case ExecutionModel::Kernel:
-		result += "_ks.bin";
+		result += "_ks.spv";
 		break;
 	case ExecutionModel::Unknown:
 		break;

@@ -41,10 +41,10 @@ ENABLE_VK_LAYER_deshade=1 application
 
 The shaders will be written to the `deshade` directory, their names
 will be the hash of their contents, with the following extension scheme:
-`_vs.{glsl,bin}` for vertex shaders, `_fs.{glsl,bin}` for fragment shaders,
-`_gs.{glsl,bin}` for geometry shaders, `_cs.{glsl,bin}` for compute shaders,
-`_tcs.{glsl,bin}` for tesselleation control shaders and `_tes.{glsl,bin}`
-for tesselation evaluation, and `_ks.bin` for Vulkan kernel shaders.
+`_vs.{glsl,spv}` for vertex shaders, `_fs.{glsl,spv}` for fragment shaders,
+`_gs.{glsl,spv}` for geometry shaders, `_cs.{glsl,spv}` for compute shaders,
+`_tcs.{glsl,spv}` for tesselleation control shaders and `_tes.{glsl,spv}`
+for tesselation evaluation, and `_ks.spv` for Vulkan kernel shaders.
 
 ## Replacing Shaders
 Modifying the contents of one of the dumpped shaders in the `deshade`
