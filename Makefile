@@ -7,7 +7,7 @@ SRCS := gl.cpp vk.cpp log.cpp hash.cpp
 OBJS := $(SRCS:.cpp=.o)
 DEPS := $(SRCS:.cpp=.d)
 
-.PHONY: all
+.PHONY: all clean install
 all: deshade.so
 
 deshade.so: $(OBJS)
@@ -18,7 +18,9 @@ $(DEPS):%.d:%.cpp
 
 include $(DEPS)
 
-.PHONY: clean
 clean:
 	-$(RM) deshade.so $(OBJS) $(DEPS)
 
+install:
+	install -Dm755 deshade.so /usr/lib/x86_64-linux-gnu/deshade.so
+	install -Dm644 deshade.json /usr/share/vulkan/explicit_layer.d/deshade.json

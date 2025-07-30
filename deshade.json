@@ -3,10 +3,10 @@
 	"layer" : {
 		"name": "VK_LAYER_deshade",
 		"type": "GLOBAL",
-		"library_path": "./deshade.so",
+		"library_path": "deshade.so",
 		"api_version": "1.0.3",
 		"implementation_version": "1",
-		"description": "deshade - https://github.com/graphitemaster/deshade",
+		"description": "deshade - https://github.com/fjdegroo/deshade",
 		"functions": {
 			"vkGetInstanceProcAddr": "deshade_vkGetInstanceProcAddr",
 			"vkGetDeviceProcAddr": "deshade_vkGetDeviceProcAddr"

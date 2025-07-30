@@ -6,9 +6,10 @@ GL4, EGL, GLES2, GLES3, GLvnd, and Vulkan without recompiling the
 application for Linux.
 
 # Building
-To build just run make
+To build just run make. Can also install through make file
 ```
 make
+sudo make install
 ```
 
 # Running
@@ -29,7 +30,8 @@ LD_PRELOAD=./deshade.so application
 To dump and or replace the shaders of a Vulkan application, the
 `deshade.json` and `deshade.so` need to be installed as an implicit layer
 with Vulkan inside `~/.local/share/vulkan/implicit_layer.d/` for the
-current user. Then enable the implicit layer with `ENABLE_VK_LAYER_deshade=1`
+current user. This is unnecessary if installing globally through makefile.
+Then enable the implicit layer with `ENABLE_VK_LAYER_deshade=1`
 like so:
 
 ```
