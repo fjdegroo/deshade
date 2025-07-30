@@ -5,7 +5,7 @@
 // 128 bit hash via djbx33ax4 (Daniel Bernstein Times 33 with Addition interleaved 4x for 128 bits)
 static void Hash128(const uint8_t *buffer, size_t size, uint8_t *out)
 {
-	const uint8_t *const end = (const uint8_t *const )buffer + size;
+	const uint8_t *const end = buffer + size;
 	uint32_t state[] = { 5381, 5381, 5381, 5381 };
 	size_t s = 0;
 	for (const uint8_t *p = buffer; p < end; p++)
