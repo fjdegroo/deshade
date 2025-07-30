@@ -13,9 +13,9 @@ sudo make install
 ```
 
 # Running
-By default, deshade will not dump an application shaders to disk to
-be replaced, unless a `shaders` directory exists where the application
-is invoked.
+Deshade dumps an application's shaders to directory `deshade`. If
+directory already exists, shaders found there matching shader hashes used
+by application will with be replaced.
 
 ## OpenGL
 To dump and or replace the shaders of an OpenGL application, preload
@@ -39,7 +39,7 @@ mkdir shaders
 ENABLE_VK_LAYER_deshade=1 application
 ```
 
-The shaders will be written to the `shaders` directory, their names
+The shaders will be written to the `deshade` directory, their names
 will be the hash of their contents, with the following extension scheme:
 `_vs.{glsl,bin}` for vertex shaders, `_fs.{glsl,bin}` for fragment shaders,
 `_gs.{glsl,bin}` for geometry shaders, `_cs.{glsl,bin}` for compute shaders,
@@ -47,7 +47,7 @@ will be the hash of their contents, with the following extension scheme:
 for tesselation evaluation, and `_ks.bin` for Vulkan kernel shaders.
 
 ## Replacing Shaders
-Modifying the contents of one of the dumpped shaders in the `shaders`
+Modifying the contents of one of the dumpped shaders in the `deshade`
 directory will take effect the next time the application is launched
 with deshade.
 

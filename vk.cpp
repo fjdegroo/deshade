@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <cstring>
 #include <cstdio>
+#include <filesystem>
 
 //#include <vulkan/vk_layer.h>
 #include "vulkan/vulkan.h"
@@ -382,8 +383,16 @@ extern "C" VK_LAYER_EXPORT VkResult VKAPI_CALL deshade_vkCreateShaderModule(
 		std::string hash = Hash128((const uint8_t*)pCode, pCreateInfo->codeSize);
 
 		std::vector<char> contents;
+
+		// ensure shader replacement dir exists
+		std::string dir_name = "deshade";
+		if (! std::filesystem::exists(dir_name)) {
+			if (! std::filesystem::create_directory(dir_name))
+				Log("Unable to create dir %s", dir_name.c_str());
+		}
+
 		// check if a shader replacement exists
-		std::string file_name = "shaders/" + hash + GetShaderExtensionString(model);
+		std::string file_name = "deshade/" + hash + GetShaderExtensionString(model);
 		std::ifstream file_contents(file_name, std::ios::binary);
 		if (file_contents.is_open())
 		{
@@ -402,7 +411,7 @@ extern "C" VK_LAYER_EXPORT VkResult VKAPI_CALL deshade_vkCreateShaderModule(
 			if (file.is_open())
 			{
 				file.write((const char *)contents.data(), contents.size());
-				Log("Dumpped % shader \"%\"\n", GetShaderTypeString(model), hash);
+				Log("Dumped % shader \"%\"\n", GetShaderTypeString(model), file_name.c_str());
 			}
 		}
 

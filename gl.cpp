@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <streambuf>
+#include <filesystem>
 
 #include <cstring> // std::memcpy, std::strlen
 
@@ -181,8 +182,15 @@ static void ShaderSource(GLuint shader, GLsizei count, const GLchar** string, co
 	// construct string from contents
 	std::string contents;
 
+	// ensure shader replacement dir exists
+	std::string dir_name = "deshade";
+	if (! std::filesystem::exists(dir_name)) {
+		if (! std::filesystem::create_directory(dir_name))
+			Log("Unable to create dir %s", dir_name.c_str());
+	}
+
 	// check if a shader replacement exists
-	std::string file_name = "shaders/" + hash + GetShaderExtensionString(shader_type);
+	std::string file_name = "deshade/" + hash + GetShaderExtensionString(shader_type);
 	std::ifstream file_contents(file_name);
 	if (file_contents.is_open())
 	{
