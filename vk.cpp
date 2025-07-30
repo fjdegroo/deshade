@@ -4,10 +4,15 @@
 #include <cstring>
 #include <cstdio>
 
-#include <vulkan/vk_layer.h>
+//#include <vulkan/vk_layer.h>
+#include "vulkan/vulkan.h"
+#include "vulkan/vk_layer.h"
+#include "vulkan/utility/vk_dispatch_table.h"
 
 #include "log.h"
 #include "hash.h"
+
+#define VK_LAYER_EXPORT
 
 template<typename T>
 void* DispatchKey(T instance)
@@ -18,8 +23,8 @@ void* DispatchKey(T instance)
 struct ContextVK
 {
 	std::mutex mutex_;
-	std::unordered_map<void*, VkLayerInstanceDispatchTable> instance_dispatch_;
-	std::unordered_map<void*, VkLayerDispatchTable> device_dispatch_;
+	std::unordered_map<void*, VkuInstanceDispatchTable> instance_dispatch_;
+	std::unordered_map<void*, VkuDeviceDispatchTable> device_dispatch_;
 };
 
 static ContextVK& GetContext()
@@ -178,7 +183,7 @@ extern "C" VK_LAYER_EXPORT VkResult VKAPI_CALL deshade_vkCreateInstance(
 	}
 
 	// fetch our own dispatch table for the functions we need, into the next layer
-	VkLayerInstanceDispatchTable dispatch_table;
+	VkuInstanceDispatchTable dispatch_table;
 
 	dispatch_table.GetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)
 		pvkGetInstanceProcAddr(*pInstance, "vkGetInstanceProcAddr");
@@ -249,7 +254,7 @@ extern "C" VK_LAYER_EXPORT VkResult VKAPI_CALL deshade_vkCreateDevice(
 	}
 
 	// fetch our own dispatch table for the functions we need, into the next layer
-	VkLayerDispatchTable dispatch_table;
+	VkuDeviceDispatchTable dispatch_table;
 
 	dispatch_table.GetDeviceProcAddr = (PFN_vkGetDeviceProcAddr)
 		pvkGetDeviceProcAddr(*pDevice, "vkGetDeviceProcAddr");
