@@ -386,40 +386,45 @@ extern "C" VK_LAYER_EXPORT VkResult VKAPI_CALL deshade_vkCreateShaderModule(
 
         // ensure shader replacement dir exists
         std::string dir_name = "deshade";
-        if (! std::filesystem::exists(dir_name)) {
-            if (! std::filesystem::create_directory(dir_name))
-                Log("Unable to create dir %s", dir_name.c_str());
+        if (! std::filesystem::exists("deshade")) {
+            if (! std::filesystem::create_directory("deshade"))
+                Log("Unable to create dir deshade");
+            std::filesystem::create_directory("deshade/replace");
         }
 
-        // check if a shader replacement exists
-        std::string file_name = "deshade/" + hash + GetShaderExtensionString(model);
-        std::ifstream file_contents(file_name, std::ios::binary);
-        if (file_contents.is_open())
-        {
-            // construct string from replacement contents
-            Log("Replaced % shader \"%\"\n", GetShaderTypeString(model), hash);
-            contents.assign((std::istreambuf_iterator<char>(file_contents)),
-                             std::istreambuf_iterator<char>());
-        }
-        else
+        // dump shader
+        std::string dump_file_name = "deshade/" + hash + GetShaderExtensionString(model);
         {
             // construct from source contents
             contents.assign((const uint8_t*)pCode, (const uint8_t*)pCode + pCreateInfo->codeSize);
 
             // write the contents to a file
-            std::ofstream file(file_name, std::ios::binary);
+            std::ofstream file(dump_file_name, std::ios::binary);
             if (file.is_open())
             {
                 file.write((const char *)contents.data(), contents.size());
-                Log("Dumped % shader \"%\"\n", GetShaderTypeString(model), file_name.c_str());
+                Log("Dumped % shader \"%\"\n", GetShaderTypeString(model), dump_file_name.c_str());
             }
         }
 
-        // replace the contents on call
-        VkShaderModuleCreateInfo create_info = *pCreateInfo;
-        create_info.codeSize = contents.size();
-        create_info.pCode = (const uint32_t*)contents.data();
-        return find->second.CreateShaderModule(device, &create_info, pAllocator, pShaderModule);
+        // replace shader, if available
+        std::string replace_file_name = "deshade/replace/" + hash + GetShaderExtensionString(model);
+        std::ifstream file_contents(replace_file_name, std::ios::binary);
+        if (file_contents.is_open())
+        {
+            // construct string from replacement contents
+            Log("Replaced % shader \"%\"\n", replace_file_name.c_str());
+            contents.assign((std::istreambuf_iterator<char>(file_contents)),
+                             std::istreambuf_iterator<char>());
+
+            // replace the contents on call
+            VkShaderModuleCreateInfo create_info = *pCreateInfo;
+            create_info.codeSize = contents.size();
+            create_info.pCode = (const uint32_t*)contents.data();
+            return find->second.CreateShaderModule(device, &create_info, pAllocator, pShaderModule);
+        }
+
+        return find->second.CreateShaderModule(device, pCreateInfo, pAllocator, pShaderModule);
     }
 
     return VK_ERROR_DEVICE_LOST;

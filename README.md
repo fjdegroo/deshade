@@ -13,9 +13,9 @@ sudo make install
 ```
 
 # Running
-Deshade dumps an application's shaders to directory `deshade`. If
-directory already exists, shaders found there matching shader hashes used
-by application will with be replaced.
+Deshade dumps an application's shaders to directory `deshade`. Shaders will
+be replaced if shader file by same name as dumped shader is found in
+`deshade/replace' directory.
 
 ## OpenGL
 To dump and or replace the shaders of an OpenGL application, preload
@@ -31,12 +31,22 @@ To dump and or replace the shaders of a Vulkan application, the
 `deshade.json` and `deshade.so` need to be installed as an implicit layer
 with Vulkan inside `~/.local/share/vulkan/implicit_layer.d/` for the
 current user. This is unnecessary if installing globally through makefile.
-Then enable the implicit layer with `ENABLE_VK_LAYER_deshade=1`
-like so:
+To modify shaders, will need both vulkan_sdk and spirv-cross installed.
 
+To dump shaders to `deshade` directory:
 ```
-mkdir shaders
-ENABLE_VK_LAYER_deshade=1 application
+VK_INSTANCE_LAYERS=VK_LAYER_deshade [application]
+```
+
+Once dumped, to modify and replace shader of name `123456_fs.spv`:
+```
+cd deshade/replace
+spirv-cross ../123456_fs.spv --version 450 > 123456_fs.frag
+#modify 123456_fs.frag file
+glslangValidator -V 123456_fs.frag -o 123456_fs.spv
+cd ../..
+
+VK_INSTANCE_LAYERS=VK_LAYER_deshade [application]
 ```
 
 The shaders will be written to the `deshade` directory, their names
